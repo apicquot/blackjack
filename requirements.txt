@@ -1,0 +1,9 @@
+# Versions the project was built and tested with (Python 3.13).
+# pip install -r requirements.txt   installs them and the package in editable mode
+numpy==2.5.3
+numba==0.67.0
+llvmlite==0.49.0
+PyYAML==6.0.3
+gymnasium==1.3.0
+pytest==9.1.1
+-e .

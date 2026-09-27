@@ -1,0 +1,24 @@
+# Las Vegas single deck: every game pays 6:5 since 2024; H17, DAS at most casinos.
+title: 1 deck, H17, DAS, 6:5
+
+rules:
+  n_decks: 1
+  penetration: 0.6      # share of the shoe dealt before the shuffle (assumed)
+  h17: true             # dealer hits soft 17
+  das: true             # double after split
+  double: any           # any, 9-11 or 10-11
+  max_hands: 2          # resplit up to this many hands (2 = no resplit)
+  resplit_aces: false
+  hit_split_aces: false
+  peek: true            # false: no hole card (European)
+  surrender: false      # late surrender
+  insurance: true
+  bj_payout: 1.2        # 1.2 for 6:5
+  n_seats: 3            # players at the table, all counting agents
+
+count_buckets:
+  width_scale: 2        # the count swings more with few decks
+
+systems: [hi_lo, hi_opt_1, hi_opt_2, omega_2, zen, wong_halves, ko]
+rounds: 5e8             # training rounds per count system
+eval_rounds: 1e8        # rounds per evaluation run

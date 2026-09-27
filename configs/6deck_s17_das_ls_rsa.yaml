@@ -1,0 +1,21 @@
+# Las Vegas high-limit shoe game, second best in the Vegas Advantage 2026 survey.
+title: 6 decks, S17, DAS, surrender, RSA, 3:2 (high limit)
+
+rules:
+  n_decks: 6
+  penetration: 0.75     # share of the shoe dealt before the shuffle (assumed)
+  h17: false            # dealer hits soft 17
+  das: true             # double after split
+  double: any           # any, 9-11 or 10-11
+  max_hands: 4          # resplit up to this many hands (2 = no resplit)
+  resplit_aces: true
+  hit_split_aces: false
+  peek: true            # false: no hole card (European)
+  surrender: true       # late surrender
+  insurance: true
+  bj_payout: 1.5        # 1.2 for 6:5
+  n_seats: 3            # players at the table, all counting agents
+
+systems: [hi_lo, hi_opt_1, hi_opt_2, omega_2, zen, wong_halves, ko]
+rounds: 5e8             # training rounds per count system
+eval_rounds: 1e8        # rounds per evaluation run

@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blackjack"
+version = "0.1.0"
+description = "Blackjack simulator and card-counting reinforcement-learning agent"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = ["numpy", "numba", "pyyaml"]
+
+[project.optional-dependencies]
+gym = ["gymnasium"]
+dev = ["pytest", "gymnasium"]
+
+[tool.setuptools.packages.find]
+include = ["blackjack*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
