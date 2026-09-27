@@ -164,8 +164,8 @@ def main():
                 shutil.copy(cfg.docs_dir / f, m / cfg.name / f)
             for system in cfg.systems:
                 shutil.copy(cfg.results_dir / f"q_{system}.npz", m / cfg.name / f"q_{system}.npz")
-            for model in cfg.dqn:
-                path = cfg.results_dir / f"dqn_{model[0]}.npz"
+            for agent in cfg.dqn:
+                path = cfg.results_dir / f"dqn_{agent[0]}.npz"
                 if path.exists():
                     shutil.copy(path, m / cfg.name / path.name)
         games = "\n".join(report._games_table(configs, lambda c: f"{pages_url}/{c.name}/index.html"))
