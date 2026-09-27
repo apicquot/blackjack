@@ -13,6 +13,7 @@ dependencies = ["numpy", "numba", "pyyaml"]
 [project.optional-dependencies]
 gym = ["gymnasium"]
 hub = ["huggingface_hub"]
+dqn = ["torch"]
 dev = ["pytest", "gymnasium"]
 
 [tool.setuptools.packages.find]

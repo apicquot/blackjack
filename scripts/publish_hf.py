@@ -59,6 +59,9 @@ For each game, a folder `<game>/` with:
 - `config.yaml`: the rules (decks, penetration, soft 17, doubling, splits, surrender,
   payout, players)
 - `q_<system>.npz`: the trained table of one count system
+- `linear.npz`: the agent without a predefined count, a linear model on the full shoe
+  composition (`W`: advantage weights per decision, `Wr`: predicted edge before the deal;
+  load with `blackjack.dqn.ModelAgent.load`)
 - `summary.csv`, `by_seat.csv`: the results by count system and by seat
 
 Each `.npz` holds:
@@ -160,6 +163,8 @@ def main():
                 shutil.copy(cfg.docs_dir / f, m / cfg.name / f)
             for system in cfg.systems:
                 shutil.copy(cfg.results_dir / f"q_{system}.npz", m / cfg.name / f"q_{system}.npz")
+            if (cfg.results_dir / "linear.npz").exists():
+                shutil.copy(cfg.results_dir / "linear.npz", m / cfg.name / "linear.npz")
         games = "\n".join(report._games_table(configs, lambda c: f"{pages_url}/{c.name}/index.html"))
         systems = list(dict.fromkeys(s for c in configs for s in c.systems))
         names = ", ".join(SYSTEMS[s].description.split(", ")[0] for s in systems)

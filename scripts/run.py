@@ -34,6 +34,8 @@ def run(cfg, steps, force):
             t = time.time()
             bet_path.write_text(json.dumps(evaluate_betting(QTable.load(q_path), cfg.eval_rounds), indent=1))
             print(f"{name}: evaluated in {time.time() - t:.0f}s", flush=True)
+    if cfg.linear_rounds:
+        run_linear(cfg, steps, force)
     basic_path = out / "basic_strategy.json"
     if "evaluate" in steps and (force or not basic_path.exists()):
         qt = QTable.load(out / f"q_{cfg.systems[0]}.npz")
@@ -41,6 +43,23 @@ def run(cfg, steps, force):
     if "report" in steps:
         report.build(cfg)
         print(f"wrote {cfg.docs_dir}/", flush=True)
+
+
+def run_linear(cfg, steps, force):
+    """The agent without a predefined count: a linear model on the full shoe composition."""
+    from blackjack.dqn import ModelAgent, train
+    out = cfg.results_dir
+    path, bet_path = out / "linear.npz", out / "betting_linear.json"
+    if "train" in steps and (force or not path.exists()):
+        t = time.time()
+        behavior = QTable.load(out / f"q_{'hi_lo' if 'hi_lo' in cfg.systems else cfg.systems[0]}.npz")
+        net = train(cfg.rules, behavior, cfg.linear_rounds, log=lambda m: None)
+        ModelAgent.from_net(net, cfg.rules).save(path)
+        print(f"linear: trained in {time.time() - t:.0f}s", flush=True)
+    if "evaluate" in steps and (force or not bet_path.exists()):
+        t = time.time()
+        bet_path.write_text(json.dumps(evaluate_betting(ModelAgent.load(path, cfg.rules), cfg.eval_rounds), indent=1))
+        print(f"linear: evaluated in {time.time() - t:.0f}s", flush=True)
 
 
 def main():

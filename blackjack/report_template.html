@@ -311,7 +311,7 @@ section { scroll-margin-top: 64px; }
 const D = /*DATA*/null;
 const ACT = ["Stand", "Hit", "Double", "Split", "Surrender"];
 const ACT_VAR = ["--a-stand", "--a-hit", "--a-double", "--a-split", "--a-surrender"];
-const NICE = { hi_lo: "Hi-Lo", hi_opt_1: "Hi-Opt I", hi_opt_2: "Hi-Opt II", omega_2: "Omega II", zen: "Zen", wong_halves: "Wong Halves", ko: "KO" };
+const NICE = { hi_lo: "Hi-Lo", hi_opt_1: "Hi-Opt I", hi_opt_2: "Hi-Opt II", omega_2: "Omega II", zen: "Zen", wong_halves: "Wong Halves", ko: "KO", linear: "No predefined count" };
 const MIN_N = 2000;
 const state = { sys: "hi_lo", b: null, view: "best", act: 1, hands: "two" };
 const S = () => D.systems[state.sys];
@@ -344,10 +344,12 @@ function drawCmp() {
   const tb = el("tbody");
   const max = k => Math.max(...D.summary.map(s => s[k]));
   [...D.summary].sort((a, b) => b.won03 - a.won03).forEach(s => {
-    const tags = D.systems[s.name].tags.map(x => (x > 0 ? "+" : x < 0 ? "−" : "") + Math.abs(x)).join(" ");
-    const name = el("td", {}, [el("b", { textContent: NICE[s.name] }),
+    const sys = D.systems[s.name];
+    const name = el("td", {}, sys ? [el("b", { textContent: NICE[s.name] }),
       el("span", { textContent: s.balanced ? "true count" : "running count" }),
-      el("div", { className: "tags", textContent: `A…T: ${tags}` })]);
+      el("div", { className: "tags", textContent: "A…T: " + sys.tags.map(x => (x > 0 ? "+" : x < 0 ? "−" : "") + Math.abs(x)).join(" ") })]
+      : [el("b", { textContent: NICE[s.name] || s.name }), el("span", { textContent: "full shoe composition, linear model" }),
+         el("div", { className: "tags", textContent: "results only: no count-based strategy card" })]);
     const bar = k => {
       const top = Math.max(...D.summary.map(x => Math.abs(x[k])));
       const b = el("span", { className: s[k] < 0 ? "meter neg" : "meter" });
@@ -355,16 +357,20 @@ function drawCmp() {
       return b;
     };
     const cell = (txt, top, extra) => { const td = el("td", { textContent: txt }); if (top) td.className = "top"; if (extra) td.append(extra); return td; };
-    const tr = el("tr", { tabIndex: 0 }, [name,
+    const tr = el("tr", { tabIndex: sys ? 0 : -1 }, [name,
       cell(sgn(s.flat * 100, 3), s.flat === max("flat"), el("div", { className: "se", textContent: `± ${(s.se * 100).toFixed(3)}` })),
       cell(sgn(s.gain * 100, 3), s.gain === max("gain")),
       cell((s.share * 100).toFixed(1) + "%"),
       cell(sgn(s.won13, 2), s.won13 === max("won13"), bar("won13")),
       cell(sgn(s.won03, 2), s.won03 === max("won03"), bar("won03"))]);
     tr.setAttribute("aria-selected", String(s.name === state.sys));
-    const pick = () => selectSys(s.name);
-    tr.addEventListener("click", pick);
-    tr.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
+    if (sys) {
+      const pick = () => selectSys(s.name);
+      tr.addEventListener("click", pick);
+      tr.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
+    } else {
+      tr.style.cursor = "default";
+    }
     tb.append(tr);
   });
   t.append(tb);
@@ -641,7 +647,7 @@ function selectSys(name) {
   drawCmp(); drawEdge(); drawBets(); drawSeats(); refresh(); drawDevs();
 }
 const sysSel = document.getElementById("sysSel");
-D.summary.forEach(s => sysSel.append(el("option", { value: s.name, textContent: NICE[s.name] })));
+D.summary.filter(s => D.systems[s.name]).forEach(s => sysSel.append(el("option", { value: s.name, textContent: NICE[s.name] })));
 sysSel.addEventListener("change", e => selectSys(e.target.value));
 seg("viewSeg", [["best", "Best action"], ["value", "Value V"], ["adv", "Advantage A"]], "view", refresh);
 seg("handSeg", [["two", "Two cards"], ["multi", "Three or more"]], "hands", refresh);
@@ -656,7 +662,7 @@ const notes = document.getElementById("notes");
  ["Limits. ", "Each agent sees the shoe only through its system's count, not the full composition. The ace-neutral systems are used without an ace side count, and Red Seven is missing because the simulator has no suits. Resplits are not modeled. Betting returns assume you can sit out rounds freely (0–3) and ignore table limits."]]
   .forEach(([b, t]) => notes.append(el("p", {}, [el("b", { textContent: b }), t])));
 
-selectSys([...D.summary].sort((a, b) => b.won03 - a.won03)[0].name);
+selectSys([...D.summary].filter(s => D.systems[s.name]).sort((a, b) => b.won03 - a.won03)[0].name);
 const redraw = () => drawEdge();
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
 new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });

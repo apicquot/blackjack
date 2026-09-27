@@ -1,4 +1,5 @@
 system,type,flat_bet_per_100_rounds,count_play_gain_per_100_rounds,share_of_rounds_with_edge,bet_1_3_per_100_rounds,bet_0_3_per_100_rounds,bet_0_3_per_100_hands_played
+No predefined count,"full composition, linear model",-0.065476,0.203903,0.342057,0.861248,1.390086,4.063895
 Wong Halves,level 3 (half points),-0.129154,0.140226,0.362990,0.717308,1.269692,3.497873
 Zen Count,level 2,-0.115049,0.154330,0.346508,0.706453,1.232253,3.556202
 Hi-Lo,level 1,-0.146146,0.123233,0.359082,0.660392,1.209807,3.369165

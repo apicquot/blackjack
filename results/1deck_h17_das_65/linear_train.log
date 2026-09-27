@@ -1,0 +1,121 @@
+chunk 1/100: 15,025,394 decisions, loss 0.9500, 11.1s
+chunk 2/100: 15,020,894 decisions, loss 0.9154, 11.3s
+chunk 3/100: 15,018,520 decisions, loss 0.9091, 13.9s
+chunk 4/100: 15,017,069 decisions, loss 0.9062, 10.9s
+chunk 5/100: 15,025,686 decisions, loss 0.9047, 10.7s
+chunk 6/100: 15,024,452 decisions, loss 0.9042, 10.6s
+chunk 7/100: 15,024,786 decisions, loss 0.9030, 10.7s
+chunk 8/100: 15,020,100 decisions, loss 0.9035, 10.6s
+chunk 9/100: 15,022,996 decisions, loss 0.9033, 11.0s
+chunk 10/100: 15,021,267 decisions, loss 0.9034, 11.4s
+chunk 11/100: 15,025,287 decisions, loss 0.9032, 10.9s
+chunk 12/100: 15,022,999 decisions, loss 0.9030, 9.8s
+chunk 13/100: 15,021,536 decisions, loss 0.9029, 9.6s
+chunk 14/100: 15,022,563 decisions, loss 0.9023, 10.7s
+chunk 15/100: 15,020,739 decisions, loss 0.9028, 10.2s
+chunk 16/100: 15,020,355 decisions, loss 0.9027, 10.6s
+chunk 17/100: 15,026,985 decisions, loss 0.9016, 10.8s
+chunk 18/100: 15,021,204 decisions, loss 0.9030, 11.0s
+chunk 19/100: 15,022,179 decisions, loss 0.9024, 9.9s
+chunk 20/100: 15,021,149 decisions, loss 0.9026, 9.6s
+chunk 21/100: 15,025,781 decisions, loss 0.9026, 8.1s
+chunk 22/100: 15,024,829 decisions, loss 0.9018, 8.4s
+chunk 23/100: 15,024,303 decisions, loss 0.9028, 8.0s
+chunk 24/100: 15,020,684 decisions, loss 0.9023, 7.5s
+chunk 25/100: 15,025,646 decisions, loss 0.9026, 7.5s
+chunk 26/100: 15,020,631 decisions, loss 0.9019, 8.1s
+chunk 27/100: 15,020,261 decisions, loss 0.9022, 8.1s
+chunk 28/100: 15,021,652 decisions, loss 0.9023, 7.8s
+chunk 29/100: 15,023,985 decisions, loss 0.9023, 7.7s
+chunk 30/100: 15,022,649 decisions, loss 0.9017, 9.0s
+chunk 31/100: 15,024,956 decisions, loss 0.9015, 8.4s
+chunk 32/100: 15,021,608 decisions, loss 0.9022, 7.7s
+chunk 33/100: 15,020,363 decisions, loss 0.9018, 8.0s
+chunk 34/100: 15,026,475 decisions, loss 0.9020, 8.4s
+chunk 35/100: 15,019,281 decisions, loss 0.9020, 7.7s
+chunk 36/100: 15,019,747 decisions, loss 0.9023, 7.5s
+chunk 37/100: 15,026,355 decisions, loss 0.9010, 8.1s
+chunk 38/100: 15,022,874 decisions, loss 0.9018, 8.3s
+chunk 39/100: 15,023,822 decisions, loss 0.9014, 7.5s
+chunk 40/100: 15,020,746 decisions, loss 0.9015, 7.7s
+chunk 41/100: 15,020,639 decisions, loss 0.9020, 8.6s
+chunk 42/100: 15,018,127 decisions, loss 0.9015, 8.8s
+chunk 43/100: 15,021,981 decisions, loss 0.9015, 7.8s
+chunk 44/100: 15,024,813 decisions, loss 0.9020, 7.6s
+chunk 45/100: 15,022,531 decisions, loss 0.9021, 8.6s
+chunk 46/100: 15,022,641 decisions, loss 0.9011, 7.9s
+chunk 47/100: 15,023,998 decisions, loss 0.9021, 7.4s
+chunk 48/100: 15,020,164 decisions, loss 0.9023, 7.5s
+chunk 49/100: 15,025,653 decisions, loss 0.9018, 8.6s
+chunk 50/100: 15,025,263 decisions, loss 0.9014, 7.6s
+chunk 51/100: 15,031,379 decisions, loss 0.9018, 7.5s
+chunk 52/100: 15,024,318 decisions, loss 0.9015, 7.9s
+chunk 53/100: 15,020,382 decisions, loss 0.9011, 8.2s
+chunk 54/100: 15,023,282 decisions, loss 0.9013, 7.3s
+chunk 55/100: 15,027,637 decisions, loss 0.9017, 7.4s
+chunk 56/100: 15,027,320 decisions, loss 0.9017, 8.1s
+chunk 57/100: 15,024,627 decisions, loss 0.9010, 8.2s
+chunk 58/100: 15,026,646 decisions, loss 0.9005, 7.4s
+chunk 59/100: 15,024,028 decisions, loss 0.9021, 7.4s
+chunk 60/100: 15,022,416 decisions, loss 0.9013, 8.0s
+chunk 61/100: 15,024,314 decisions, loss 0.9011, 8.2s
+chunk 62/100: 15,025,481 decisions, loss 0.9014, 8.1s
+chunk 63/100: 15,025,152 decisions, loss 0.9014, 8.1s
+chunk 64/100: 15,026,666 decisions, loss 0.9008, 8.5s
+chunk 65/100: 15,023,222 decisions, loss 0.9013, 9.1s
+chunk 66/100: 15,024,753 decisions, loss 0.9013, 9.4s
+chunk 67/100: 15,020,483 decisions, loss 0.9016, 9.6s
+chunk 68/100: 15,021,484 decisions, loss 0.9009, 7.7s
+chunk 69/100: 15,023,172 decisions, loss 0.9016, 7.3s
+chunk 70/100: 15,026,043 decisions, loss 0.9017, 8.2s
+chunk 71/100: 15,024,411 decisions, loss 0.9016, 7.8s
+chunk 72/100: 15,022,748 decisions, loss 0.9013, 7.3s
+chunk 73/100: 15,019,322 decisions, loss 0.9017, 7.5s
+chunk 74/100: 15,021,867 decisions, loss 0.9012, 8.0s
+chunk 75/100: 15,018,948 decisions, loss 0.9019, 8.0s
+chunk 76/100: 15,026,255 decisions, loss 0.9010, 7.3s
+chunk 77/100: 15,020,228 decisions, loss 0.9021, 7.3s
+chunk 78/100: 15,020,872 decisions, loss 0.9021, 8.1s
+chunk 79/100: 15,023,062 decisions, loss 0.9014, 8.0s
+chunk 80/100: 15,026,795 decisions, loss 0.9009, 8.0s
+chunk 81/100: 15,015,486 decisions, loss 0.9016, 7.9s
+chunk 82/100: 15,025,504 decisions, loss 0.9009, 8.1s
+chunk 83/100: 15,019,163 decisions, loss 0.9021, 8.9s
+chunk 84/100: 15,030,574 decisions, loss 0.9009, 8.1s
+chunk 85/100: 15,025,645 decisions, loss 0.9017, 8.0s
+chunk 86/100: 15,019,950 decisions, loss 0.9009, 8.1s
+chunk 87/100: 15,026,333 decisions, loss 0.9015, 7.7s
+chunk 88/100: 15,022,117 decisions, loss 0.9021, 7.7s
+chunk 89/100: 15,028,182 decisions, loss 0.9008, 8.2s
+chunk 90/100: 15,027,337 decisions, loss 0.9017, 8.1s
+chunk 91/100: 15,027,992 decisions, loss 0.9010, 7.8s
+chunk 92/100: 15,022,668 decisions, loss 0.9007, 8.1s
+chunk 93/100: 15,020,385 decisions, loss 0.9011, 7.9s
+chunk 94/100: 15,028,029 decisions, loss 0.9009, 8.0s
+chunk 95/100: 15,024,299 decisions, loss 0.9007, 8.1s
+chunk 96/100: 15,021,803 decisions, loss 0.9013, 7.7s
+chunk 97/100: 15,025,504 decisions, loss 0.9008, 7.4s
+chunk 98/100: 15,021,485 decisions, loss 0.9009, 8.6s
+chunk 99/100: 15,019,553 decisions, loss 0.9011, 8.1s
+chunk 100/100: 15,021,289 decisions, loss 0.9012, 7.9s
+trained in 857s
+FLAT -0.509 +/- 0.007
+overall EV/round -0.5089% +/- 0.0066%
+  count    share      EV/round    s.e.
+   <=-4    4.81%     -3.400%   0.029%
+   -3.5    2.19%     -2.923%   0.043%
+     -3    3.07%     -2.658%   0.037%
+   -2.5    4.12%     -2.262%   0.032%
+     -2    5.29%     -1.884%   0.028%
+   -1.5    6.16%     -1.423%   0.026%
+     -1    6.72%     -0.890%   0.025%
+   -0.5   38.43%     -1.129%   0.011%
+      0    6.38%     +0.189%   0.026%
+   +0.5    5.62%     +0.748%   0.028%
+     +1    4.59%     +1.388%   0.031%
+   +1.5    3.61%     +2.036%   0.035%
+     +2    2.70%     +2.764%   0.041%
+   +2.5    1.96%     +3.578%   0.048%
+     +3    1.39%     +4.084%   0.057%
+   +3.5    0.97%     +4.898%   0.068%
+   >=+4    1.99%     +6.737%   0.047%

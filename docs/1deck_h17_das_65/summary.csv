@@ -1,4 +1,5 @@
 system,type,flat_bet_per_100_rounds,count_play_gain_per_100_rounds,share_of_rounds_with_edge,bet_1_3_per_100_rounds,bet_0_3_per_100_rounds,bet_0_3_per_100_hands_played
+No predefined count,"full composition, linear model",-0.499753,1.092724,0.292109,0.677801,1.766331,6.046821
 Omega II,"level 2, ace neutral",-0.877730,0.714747,0.255219,-0.046467,1.246895,4.885580
 Hi-Opt II,"level 2, ace neutral",-0.880633,0.711844,0.250216,-0.052737,1.241844,4.963084
 Zen Count,level 2,-0.920943,0.671534,0.255805,-0.099313,1.232446,4.817910

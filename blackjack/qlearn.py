@@ -30,8 +30,14 @@ def _run(rules, count, buckets, Qs, Ns, Qis, Nis, n_rounds, seed, learn, eps):
     E.run_parallel(Qs, Ns, Qis, Nis, stats, n_rounds, seed, learn, eps, tags, cp, rules.n_decks,
                    rules.penetration, rules.h17, rules.das, rules.double_min, rules.max_hands,
                    rules.resplit_aces, rules.hit_split_aces, rules.peek, rules.surrender,
-                   rules.insurance, rules.bj_payout, rules.n_seats)
+                   rules.insurance, rules.bj_payout, rules.n_seats, 0, _NO_W, _NO_MLP, _NO_MDIMS, _NO_WR)
     return stats.sum(axis=0)
+
+
+_NO_W = np.zeros((1, 1, 1, 1, E.N_FEAT))
+_NO_WR = np.zeros(E.N_FEAT)
+_NO_MLP = np.zeros(1)
+_NO_MDIMS = np.zeros(3, np.int64)
 
 
 def _copies(x, W):

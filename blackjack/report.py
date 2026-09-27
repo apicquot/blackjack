@@ -75,6 +75,26 @@ def index_plays(qt):
     return plays, mode
 
 
+LINEAR = "linear"  # the agent without a predefined count (blackjack.dqn), a recap row only
+
+
+def _names(name):
+    """(system, type) as shown in the recap."""
+    if name == LINEAR:
+        return "No predefined count", "full composition, linear model"
+    return tuple(SYSTEMS[name].description.split(", ", 1))
+
+
+def _summary_row(name, bet, basic):
+    share, edge, se = map(np.array, (bet["share"], bet["edge"], bet["edge_se"]))
+    flat = bet["strategies"]["flat 1"]
+    return dict(name=name, balanced=name == LINEAR or SYSTEMS[name].balanced, flat=flat["ev_round"],
+                se=float(np.sqrt((share ** 2 * se ** 2).sum())), share=float(share[edge > 0].sum()),
+                gain=flat["ev_round"] - basic, won13=100 * bet["strategies"]["1-3 max EV"]["ev_round"],
+                won03=100 * bet["strategies"]["0-3 max EV"]["ev_round"],
+                ev_hand03=bet["strategies"]["0-3 max EV"]["ev_hand"], seats=bet["seats"])
+
+
 def build(cfg):
     """Write docs/<game>/strategy_card.html and docs/<game>/summary.csv from results/<game>/."""
     basic = json.loads((cfg.results_dir / "basic_strategy.json").read_text())["ev"]
@@ -99,12 +119,10 @@ def build(cfg):
             edge=dict(labels=bet["labels"], share=share.tolist(), mean=edge.tolist(), se=se.tolist(),
                       overall=flat["ev_round"], overall_se=float(np.sqrt((share ** 2 * se ** 2).sum()))),
             devs=plays)
-        summary.append(dict(name=name, balanced=SYSTEMS[name].balanced, flat=flat["ev_round"],
-                            se=systems[name]["edge"]["overall_se"], share=float(share[edge > 0].sum()),
-                            gain=flat["ev_round"] - basic,
-                            won13=100 * bet["strategies"]["1-3 max EV"]["ev_round"],
-                            won03=100 * bet["strategies"]["0-3 max EV"]["ev_round"],
-                            ev_hand03=bet["strategies"]["0-3 max EV"]["ev_hand"], seats=bet["seats"]))
+        summary.append(_summary_row(name, bet, basic))
+    linear = cfg.results_dir / f"betting_{LINEAR}.json"
+    if linear.exists():
+        summary.append(_summary_row(LINEAR, json.loads(linear.read_text()), basic))
 
     rules = cfg.rules
     solver = InfiniteDeckSolver(rules)
@@ -133,7 +151,7 @@ def _units(x, decimals):
 def _write_csv(summary, basic, path):
     rows = []
     for s in sorted(summary, key=lambda s: -s["won03"]):
-        name, kind = SYSTEMS[s["name"]].description.split(", ", 1)
+        name, kind = _names(s["name"])
         rows.append(dict(zip(RECAP_COLUMNS, [name, kind, 100 * s["flat"], 100 * s["gain"], s["share"],
                                              s["won13"], s["won03"], 100 * s["ev_hand03"]])))
     rows.append(dict(zip(RECAP_COLUMNS, ["No count", "basic strategy", 100 * basic, 0.0])))
@@ -151,7 +169,7 @@ def _write_seats_csv(summary, path):
         w.writeheader()
         for s in sorted(summary, key=lambda s: -s["won03"]):
             for i, seat in enumerate(s["seats"]):
-                w.writerow(dict(zip(SEAT_COLUMNS, [SYSTEMS[s["name"]].description.split(", ")[0], i + 1]
+                w.writerow(dict(zip(SEAT_COLUMNS, [_names(s["name"])[0], i + 1]
                                     + [f"{v:.6f}" for v in (100 * seat["flat"], 100 * seat["se"],
                                                             seat["won13"], seat["won03"])])))
 
@@ -187,7 +205,12 @@ def _recap_table(cfg):
                      f"| {_units(r['count_play_gain_per_100_rounds'], 3)} | {share} "
                      f"| {_units(r['bet_1_3_per_100_rounds'], 2)} | {_units(r['bet_0_3_per_100_rounds'], 2)} "
                      f"| {_units(r['bet_0_3_per_100_hands_played'], 2)} |")
-    return lines + _seat_table(cfg, rows[0]["system"])
+    return lines + _seat_table(cfg, _best_count(rows)["system"])
+
+
+def _best_count(rows):
+    """The best counting system in a summary.csv (rows are sorted best first)."""
+    return next(r for r in rows if r["system"] not in ("No count", _names(LINEAR)[0]))
 
 
 def _games_table(configs, link=lambda cfg: f"docs/{cfg.name}/strategy_card.html"):
@@ -198,7 +221,7 @@ def _games_table(configs, link=lambda cfg: f"docs/{cfg.name}/strategy_card.html"
     for cfg in configs:
         with open(cfg.docs_dir / "summary.csv", encoding="utf-8") as f:
             rows = list(csv.DictReader(f))
-        best, basic = rows[0], rows[-1]
+        best, basic = _best_count(rows), rows[-1]
         lines.append(f"| [{cfg.title}]({link(cfg)}) | {best['system']} "
                      f"| {_units(basic['flat_bet_per_100_rounds'], 2)} | {_units(best['flat_bet_per_100_rounds'], 2)} "
                      f"| {_units(best['bet_1_3_per_100_rounds'], 2)} | {_units(best['bet_0_3_per_100_rounds'], 2)} "

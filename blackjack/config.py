@@ -18,6 +18,7 @@ class Config:
     eval_rounds: int     # rounds per evaluation run
     bucket_half: int = 6        # count buckets on each side of the centre
     bucket_scale: float = 1.0   # wider count steps for games whose count swings more
+    linear_rounds: int = 0      # training rounds of the agent without a predefined count (0 = none)
 
     @classmethod
     def load(cls, path):
@@ -35,7 +36,8 @@ class Config:
         return cls(name=path.stem, title=d["title"], rules=RuleSet(**d.get("rules", {})),
                    systems=systems, rounds=int(float(d.get("rounds", 1e9))),
                    eval_rounds=int(float(d.get("eval_rounds", 2e8))),
-                   bucket_half=int(buckets.get("half", 6)), bucket_scale=float(buckets.get("width_scale", 1.0)))
+                   bucket_half=int(buckets.get("half", 6)), bucket_scale=float(buckets.get("width_scale", 1.0)),
+                   linear_rounds=int(float(d.get("linear", {}).get("rounds", 0))))
 
     def buckets(self, system):
         return default_bucketing(SYSTEMS[system], self.rules.n_decks, self.bucket_half, self.bucket_scale)

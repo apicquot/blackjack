@@ -1,4 +1,7 @@
 system,seat,flat_bet_per_100_rounds,flat_bet_std_error,bet_1_3_per_100_rounds,bet_0_3_per_100_rounds
+No predefined count,1,-0.334381,0.011345,0.439470,1.160775
+No predefined count,2,-0.336966,0.011345,0.410212,1.120767
+No predefined count,3,-0.343355,0.011344,0.401357,1.117068
 Wong Halves,1,-0.402910,0.011471,0.274703,1.016419
 Wong Halves,2,-0.392583,0.011472,0.287972,1.020833
 Wong Halves,3,-0.412217,0.011471,0.251290,0.995260

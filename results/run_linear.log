@@ -1,0 +1,25 @@
+== 1deck_h17_das_65: 1 deck, H17, DAS, 6:5
+RuleSet(n_decks=1, penetration=0.6, h17=True, das=True, double='any', max_hands=2, resplit_aces=False, hit_split_aces=False, peek=True, surrender=False, insurance=True, bj_payout=1.2, n_seats=3)
+linear: evaluated in 69s
+wrote docs\1deck_h17_das_65/
+== 2deck_h17_das: 2 decks, H17, DAS, 3:2
+RuleSet(n_decks=2, penetration=0.65, h17=True, das=True, double='any', max_hands=2, resplit_aces=False, hit_split_aces=False, peek=True, surrender=False, insurance=True, bj_payout=1.5, n_seats=3)
+linear: trained in 819s
+linear: evaluated in 64s
+wrote docs\2deck_h17_das/
+== 6deck_h17_das_ls: 6 decks, H17, DAS, surrender, 3:2
+RuleSet(n_decks=6, penetration=0.75, h17=True, das=True, double='any', max_hands=4, resplit_aces=False, hit_split_aces=False, peek=True, surrender=True, insurance=True, bj_payout=1.5, n_seats=3)
+linear: trained in 761s
+linear: evaluated in 65s
+wrote docs\6deck_h17_das_ls/
+== 6deck_s17_das_ls_rsa: 6 decks, S17, DAS, surrender, RSA, 3:2 (high limit)
+RuleSet(n_decks=6, penetration=0.75, h17=False, das=True, double='any', max_hands=4, resplit_aces=True, hit_split_aces=False, peek=True, surrender=True, insurance=True, bj_payout=1.5, n_seats=3)
+linear: trained in 734s
+linear: evaluated in 61s
+wrote docs\6deck_s17_das_ls_rsa/
+== 8deck_h17_das_ls: 8 decks, H17, DAS, surrender, 3:2
+RuleSet(n_decks=8, penetration=0.75, h17=True, das=True, double='any', max_hands=4, resplit_aces=False, hit_split_aces=False, peek=True, surrender=True, insurance=True, bj_payout=1.5, n_seats=3)
+linear: trained in 798s
+linear: evaluated in 64s
+wrote docs\8deck_h17_das_ls/
+updated README recap

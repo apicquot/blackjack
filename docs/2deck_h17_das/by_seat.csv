@@ -1,4 +1,7 @@
 system,seat,flat_bet_per_100_rounds,flat_bet_std_error,bet_1_3_per_100_rounds,bet_0_3_per_100_rounds
+No predefined count,1,0.043878,0.011533,1.407757,2.045819
+No predefined count,2,0.055233,0.011533,1.434282,2.068573
+No predefined count,3,0.069219,0.011533,1.450398,2.071769
 Zen Count,1,-0.164263,0.011531,0.975730,1.709990
 Zen Count,2,-0.156755,0.011530,0.971686,1.692661
 Zen Count,3,-0.149611,0.011530,0.994831,1.716663

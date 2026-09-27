@@ -64,6 +64,7 @@ All money is in units won per 100 rounds dealt (1 unit = the minimum bet), excep
 
 | system | type | flat bet | gain from playing the count | rounds with player edge | bet 1–3, play every round | bet 0–3, sit out bad counts | 0–3: units won per 100 hands played |
 |---|---|---|---|---|---|---|---|
+| No predefined count | full composition, linear model | −0.500 | +1.093 | 29.2% | +0.68 | +1.77 | +6.05 |
 | Omega II | level 2, ace neutral | −0.878 | +0.715 | 25.5% | −0.05 | +1.25 | +4.89 |
 | Hi-Opt II | level 2, ace neutral | −0.881 | +0.712 | 25.0% | −0.05 | +1.24 | +4.96 |
 | Zen Count | level 2 | −0.921 | +0.672 | 25.6% | −0.10 | +1.23 | +4.82 |
@@ -87,6 +88,7 @@ By seat, Omega II (seat 1 acts first; each seat sees the cards of the seats befo
 
 | system | type | flat bet | gain from playing the count | rounds with player edge | bet 1–3, play every round | bet 0–3, sit out bad counts | 0–3: units won per 100 hands played |
 |---|---|---|---|---|---|---|---|
+| No predefined count | full composition, linear model | +0.056 | +0.550 | 37.4% | +1.43 | +2.06 | +5.52 |
 | Zen Count | level 2 | −0.157 | +0.337 | 31.6% | +0.98 | +1.71 | +5.41 |
 | Wong Halves | level 3 (half points) | −0.195 | +0.299 | 32.8% | +0.94 | +1.70 | +5.17 |
 | Omega II | level 2, ace neutral | −0.137 | +0.357 | 31.5% | +0.97 | +1.67 | +5.29 |
@@ -110,6 +112,7 @@ By seat, Zen Count (seat 1 acts first; each seat sees the cards of the seats bef
 
 | system | type | flat bet | gain from playing the count | rounds with player edge | bet 1–3, play every round | bet 0–3, sit out bad counts | 0–3: units won per 100 hands played |
 |---|---|---|---|---|---|---|---|
+| No predefined count | full composition, linear model | −0.338 | +0.200 | 27.0% | +0.42 | +1.13 | +4.20 |
 | Wong Halves | level 3 (half points) | −0.403 | +0.136 | 36.2% | +0.27 | +1.01 | +2.79 |
 | Zen Count | level 2 | −0.392 | +0.146 | 34.6% | +0.27 | +0.99 | +2.86 |
 | Omega II | level 2, ace neutral | −0.381 | +0.157 | 34.6% | +0.27 | +0.98 | +2.82 |
@@ -133,6 +136,7 @@ By seat, Wong Halves (seat 1 acts first; each seat sees the cards of the seats b
 
 | system | type | flat bet | gain from playing the count | rounds with player edge | bet 1–3, play every round | bet 0–3, sit out bad counts | 0–3: units won per 100 hands played |
 |---|---|---|---|---|---|---|---|
+| No predefined count | full composition, linear model | −0.065 | +0.204 | 34.2% | +0.86 | +1.39 | +4.06 |
 | Wong Halves | level 3 (half points) | −0.129 | +0.140 | 36.3% | +0.72 | +1.27 | +3.50 |
 | Zen Count | level 2 | −0.115 | +0.154 | 34.7% | +0.71 | +1.23 | +3.56 |
 | Hi-Lo | level 1 | −0.146 | +0.123 | 35.9% | +0.66 | +1.21 | +3.37 |
@@ -156,6 +160,7 @@ By seat, Wong Halves (seat 1 acts first; each seat sees the cards of the seats b
 
 | system | type | flat bet | gain from playing the count | rounds with player edge | bet 1–3, play every round | bet 0–3, sit out bad counts | 0–3: units won per 100 hands played |
 |---|---|---|---|---|---|---|---|
+| No predefined count | full composition, linear model | −0.438 | +0.120 | 23.3% | +0.13 | +0.85 | +3.64 |
 | Wong Halves | level 3 (half points) | −0.468 | +0.090 | 35.0% | +0.03 | +0.74 | +2.12 |
 | Zen Count | level 2 | −0.465 | +0.093 | 33.0% | +0.02 | +0.73 | +2.22 |
 | Omega II | level 2, ace neutral | −0.465 | +0.093 | 33.0% | +0.01 | +0.72 | +2.17 |
@@ -193,6 +198,21 @@ All figures are units won per 100 rounds, 1 unit being the minimum bet.
   - Counting recovers +0.7 of that by playing alone, but playing every round with a
     1–3 spread still loses (−0.05).
   - Only sitting out bad counts makes it pay (+1.25).
+- **Knowing the full composition beats every count, most of all with few decks.** The
+  agent without a predefined count (a linear model on how many of each rank are
+  left) comes first in every game. Its lead over the best count, flat bet:
+  - **+0.38** in single deck (−0.50 against −0.88);
+  - **+0.21** in double deck, where it beats the house even with a flat bet (+0.06);
+  - **+0.06** in 6 decks and **+0.03** in 8 decks.
+
+  In shoes, a single count captures almost all the information.
+  - **Where the gain comes from:** mostly playing decisions. Insurance adds only a
+    little: without it, the single-deck gap over Omega II stays at 0.35.
+  - **Not an artifact of coarse count buckets:** Hi-Lo trained with twice-finer
+    buckets does no better (−1.036 against −1.037).
+  - **Consistent with counting theory:** the gap matches the published "playing
+    efficiency" of the systems (about 0.5 for Hi-Lo, 0.67 for Omega II in single
+    deck).
 - **The count system matters less than the game.**
   - Within a game, the systems are within about 0.3 per 100 rounds of each other.
   - The level-2 systems (Zen, Omega II, Hi-Opt II) and Wong Halves come out on
@@ -296,6 +316,7 @@ eval_rounds: 1e8        # rounds per evaluation run
 | `blackjack/counts.py` | counting systems, and `Counter`, the player-side running and true count |
 | `blackjack/solver.py` | exact infinite-deck dynamic programming, the ground truth for tests |
 | `blackjack/betting.py` | betting strategies and their evaluation |
+| `blackjack/experience.py`, `dqn.py` | the agent without a predefined count: experience export from the engine, and a double dueling DQN (linear model by default) in PyTorch |
 | `blackjack/config.py`, `report.py` | config loading; results page, CSV and README recap |
 | `blackjack/envs/shoe/` | object-oriented table (Deck, Hand, Player, Table, Rules, strategies) |
 | `blackjack/envs/shoe/gym_env.py` | `ShoeEnv`, a gymnasium interface to the table for other RL libraries |
@@ -460,33 +481,43 @@ learned table with all counts pooled.
 
 ## Limits and next steps
 
-**Next: learn without a predefined count.** Today each agent sees the shoe through
-one counting system, a single number chosen in advance. The next step is to let the
-agent learn the optimal strategy, and the game's return, from what a player can
-actually see: the cards seen per rank (`ShoeView.seen`) and the cards left, with no
-counting system assumed.
+**Learning without a predefined count (step 1 done).** Besides the seven counting
+systems, an agent learns from what a player actually sees, with no counting system
+assumed: the cards seen per rank and the cards left.
 
-- **Why a table no longer works:** the state becomes multi-dimensional (10 rank
-  counts plus the hand and the up card, about 10¹⁴ shoe compositions for 6 decks),
-  far too many for a table. A model has to generalize from the compositions it sees
-  to similar ones.
-- **Step 1, a linear model:** for each decision, the value is a weighted sum of the
-  excess of each rank left per deck. The learned weights are an ideal count for that
-  decision (the "effects of removal"), directly comparable with a system's tags. It's
-  small (about 21,000 weights), stable, and readable.
-- **Step 2, a neural network,** if the linear model leaves a meaningful gap: a double
-  dueling DQN with action masks. It captures interactions between ranks, with separate
-  outputs for the value V and the advantages A. It needs large batches from the numba
-  engine; the Python `ShoeEnv` is too slow for that volume.
-- **Ground truth:** the rules and card odds are fully known, so the exact value of
-  each action can be computed for any sampled composition. Exact values for a few
-  thousand compositions measure how close each model gets. They could also be used
-  directly as noise-free training targets.
-- **Reporting:** the same report format. The agent is one more row, "no predefined
-  count", in each game's recap table, with the same metrics measured the same way:
-  flat bet, gain from playing, rounds with player edge, and the betting returns. That
-  row measures what a one-number count leaves on the table. The strategy card and index
-  plays assume a single count, so they won't offer it.
+- **Why not a table:** the state (the shoe composition plus the hand and the up card)
+  has about 10¹⁴ values for 6 decks. A model has to generalize from the compositions
+  it sees to similar ones.
+- **The model (`blackjack/dqn.py`):** a double dueling DQN in PyTorch. It has
+  separate outputs for the value V and the advantages A, and action masks for the
+  legal plays.
+  - **Linear by default (`hidden=()`):** for each decision, V and A are weighted sums
+    of the excess of each rank left per deck. The weights are an ideal count for that
+    decision.
+  - **Hidden layers** can be added on top (`hidden=(256, 256)`), with the linear part
+    as a shortcut.
+- **Experience:** the numba engine exports every decision of rounds played by the Hi-Lo
+  table with 30% exploration (`blackjack/experience.py`). Q-learning is off-policy, so
+  a fixed exploring player is enough.
+- **Training:** on the GPU if there is one; 400M rounds take about 15 minutes.
+- **Insurance:** the exact rule for a known composition (insure when more than a third
+  of the unseen cards are tens), so it needs no learning.
+- **Betting:** a linear fit of the round's value on the composition before the deal,
+  learned from the model's own play, then the same betting evaluation as the counts.
+- **Reporting:** one more row in each game's recap, "No predefined count". The strategy
+  card and index plays assume a single count, so they don't offer it.
+- **Checks:** a linear model with only constant weights plays exactly like the table
+  it was built from (identical results with the same seed).
+
+**Next steps for it**
+
+- **Hidden layers,** to test whether interactions between ranks add anything beyond
+  the linear model.
+- **A nonlinear predictor of a round's value** for betting. The value of a round is
+  convex in the composition: any departure from a neutral shoe lets the player adapt.
+  So a linear fit underestimates the good and bad extremes.
+- **Exact values for sampled compositions,** as ground truth for the model's action
+  values.
 
 **Known gaps from the counting literature**
 
