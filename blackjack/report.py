@@ -87,8 +87,11 @@ def build(cfg):
         systems[name] = dict(
             desc=SYSTEMS[name].description, balanced=SYSTEMS[name].balanced, tags=list(SYSTEMS[name].tags),
             labels=bet["labels"], centers=qt.buckets.centers().tolist(), mode=mode,
-            two=[_cells(Qp[b], qt.N[b], ROWS_TWO, 1) for b in range(qt.buckets.n)],
-            multi=[_cells(Qp[b], qt.N[b], ROWS_MULTI, 0) for b in range(qt.buckets.n)],
+            # one entry per count bucket, then the count-blind (all counts pooled) table
+            two=[_cells(Qp[b], qt.N[b], ROWS_TWO, 1) for b in range(qt.buckets.n)]
+                + [_cells(pooled, qt.N.sum(axis=0), ROWS_TWO, 1)],
+            multi=[_cells(Qp[b], qt.N[b], ROWS_MULTI, 0) for b in range(qt.buckets.n)]
+                + [_cells(pooled, qt.N.sum(axis=0), ROWS_MULTI, 0)],
             base_two=_best_action(pooled, ROWS_TWO, 1), base_multi=_best_action(pooled, ROWS_MULTI, 0),
             edge=dict(labels=bet["labels"], share=share.tolist(), mean=edge.tolist(), se=se.tolist(),
                       overall=flat["ev_round"], overall_se=float(np.sqrt((share ** 2 * se ** 2).sum()))),

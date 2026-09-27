@@ -558,7 +558,8 @@ function cellTip(r, up, c, i, j) {
   const [db, dv] = bestOf(dp);
   const foot = el("div", { className: "foot", textContent:
     `± ${se.toFixed(3)} (1 s.e. of best Q). Infinite-deck exact: ${db >= 0 ? ACT[db].toLowerCase() + " " + sgn(dv) : "n/a"}.` });
-  return [el("h4", { textContent: `${rowLabel(r)} vs ${up} · ${NICE[state.sys]} ${nice(S().labels[state.b])}` }), tb, foot];
+  const at = state.b === S().labels.length ? "no count" : `${NICE[state.sys]} ${nice(S().labels[state.b])}`;
+  return [el("h4", { textContent: `${rowLabel(r)} vs ${up} · ${at}` }), tb, foot];
 }
 
 function drawLegend() {
@@ -633,7 +634,8 @@ function selectSys(name) {
   document.getElementById("sysSel").value = name;
   document.querySelectorAll(".sysName").forEach(e => e.textContent = NICE[name]);
   document.getElementById("cntLabel").textContent = unit()[0].toUpperCase() + unit().slice(1);
-  seg("tcSeg", S().labels.map((l, i) => [i, nice(l), `${unit()} ${l}`]), "b", refresh);
+  seg("tcSeg", [[S().labels.length, "No count", "No count: basic strategy for this shoe"]]
+    .concat(S().labels.map((l, i) => [i, nice(l), `${unit()} ${l}`])), "b", refresh);
   drawCmp(); drawEdge(); drawBets(); drawSeats(); refresh(); drawDevs();
 }
 const sysSel = document.getElementById("sysSel");
