@@ -11,6 +11,8 @@ from blackjack.qlearn import QTable
 from blackjack.solver import InfiniteDeckSolver
 
 TEMPLATE = Path(__file__).with_name("report_template.html")
+STANDALONE_HEAD = ('<!doctype html>\n<html lang="en">\n<meta charset="utf-8">\n'
+                   '<meta name="viewport" content="width=device-width, initial-scale=1">\n')
 UPS = list(range(2, 11)) + [1]
 ROWS_TWO = [f"H{t}" for t in range(5, 21)] + [f"S{t}" for t in range(13, 21)] \
     + ["2,2", "3,3", "4,4", "5,5", "6,6", "7,7", "8,8", "9,9", "10,10", "A,A"]
@@ -116,9 +118,9 @@ def build(cfg):
         seats={s["name"]: s["seats"] for s in summary})
 
     cfg.docs_dir.mkdir(parents=True, exist_ok=True)
-    html = TEMPLATE.read_text(encoding="utf-8").replace("/*TITLE*/", f"Counting Strategies, {cfg.title}")
-    (cfg.docs_dir / "strategy_card.html").write_text(
-        html.replace("/*DATA*/null", json.dumps(data, separators=(",", ":"))), encoding="utf-8")
+    page = (TEMPLATE.read_text(encoding="utf-8").replace("/*TITLE*/", f"Counting Strategies, {cfg.title}")
+            .replace("/*DATA*/null", json.dumps(data, separators=(",", ":"))))
+    (cfg.docs_dir / "strategy_card.html").write_text(STANDALONE_HEAD + page + "</html>\n", encoding="utf-8")
     _write_csv(summary, basic, cfg.docs_dir / "summary.csv")
     _write_seats_csv(summary, cfg.docs_dir / "by_seat.csv")
 
