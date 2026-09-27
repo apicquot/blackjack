@@ -30,13 +30,14 @@ def test_readme_recap(tmp_path, monkeypatch):
     cfg.docs_dir.mkdir(parents=True)
     (cfg.docs_dir / "summary.csv").write_text(
         ",".join(report.RECAP_COLUMNS) + "\n"
-        "Hi-Lo,level 1,-0.003,0.001,0.36,0.13,0.80,0.022\n"
-        "Knock-Out,level 1,-0.004,0.0005,0.26,0.08,0.75,0.029\n"
-        "No count,basic strategy,-0.005,0.0,,,,\n")
+        "Hi-Lo,level 1,-0.3,0.1,0.36,0.13,0.80,2.2\n"
+        "Knock-Out,level 1,-0.4,0.05,0.26,0.08,0.75,2.9\n"
+        "No count,basic strategy,-0.5,0.0,,,,\n")
     readme = tmp_path / "README.md"
     readme.write_text(f"intro\n{report.RECAP_START}\nold\n{report.RECAP_END}\noutro\n")
     assert report.update_readme([cfg], readme)
     text = readme.read_text(encoding="utf-8")
     assert "old" not in text and text.startswith("intro") and text.endswith("outro\n")
-    assert "| [Test game](docs/g/strategy_card.html) | Hi-Lo | −0.50% | −0.30% | +0.13 | +0.80 | +2.20% |" in text
-    assert "| Knock-Out | level 1 |" in text
+    assert "| [Test game](docs/g/strategy_card.html) | Hi-Lo | −0.50 | −0.30 | +0.13 | +0.80 | +2.20 |" in text
+    assert "| Knock-Out | level 1 | −0.400 | +0.050 | 26.0% | +0.08 | +0.75 | +2.90 |" in text
+    assert "| No count | basic strategy | −0.500 | +0.000 |  |  |  |  |" in text

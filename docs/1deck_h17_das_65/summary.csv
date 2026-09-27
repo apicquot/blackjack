@@ -1,0 +1,9 @@
+system,type,flat_bet_per_100_rounds,count_play_gain_per_100_rounds,share_of_rounds_with_edge,bet_1_3_per_100_rounds,bet_0_3_per_100_rounds,bet_0_3_per_100_hands_played
+Omega II,"level 2, ace neutral",-0.877730,0.714747,0.255219,-0.046467,1.246895,4.885580
+Hi-Opt II,"level 2, ace neutral",-0.880633,0.711844,0.250216,-0.052737,1.241844,4.963084
+Zen Count,level 2,-0.920943,0.671534,0.255805,-0.099313,1.232446,4.817910
+Wong Halves,level 3 (half points),-0.974125,0.618352,0.265184,-0.185267,1.183288,4.462136
+Knock-Out,"level 1, unbalanced (running count)",-1.051514,0.540963,0.225902,-0.267162,1.176529,5.208140
+Hi-Opt I,"level 1, ace neutral",-0.934039,0.658439,0.276680,-0.194994,1.108567,4.006676
+Hi-Lo,level 1,-1.024277,0.568200,0.158729,-0.311865,1.068619,6.732329
+No count,basic strategy,-1.592477,0.000000,,,,

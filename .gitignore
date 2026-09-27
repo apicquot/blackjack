@@ -1,3 +1,3 @@
 __pycache__/
 *.egg-info/
-results/
+.pytest_cache/

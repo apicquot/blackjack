@@ -190,6 +190,7 @@ table.card { border-collapse: separate; border-spacing: 2px; font: 500 12px/1 va
 .cmp .top { font-weight: 600; color: var(--ink); }
 .cmp .se { color: var(--muted); font-size: 11px; }
 .meter { display: inline-block; height: 8px; border-radius: 0 4px 4px 0; background: var(--pos); vertical-align: middle; margin-left: 8px; }
+.meter.neg { background: var(--neg); }
 .tags { font: 400 11px/1.3 var(--mono); color: var(--muted); }
 .defs { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; font-size: 13px; color: var(--ink-2); max-width: 80ch; }
 .defs dt { font-weight: 600; color: var(--ink); }
@@ -263,7 +264,7 @@ section { scroll-margin-top: 64px; }
     <dl class="defs" id="betDefs"></dl>
     <div id="seatBox">
       <h2 class="h3">Return by seat</h2>
-      <p class="lede">Every player at the table counts and plays the same learned strategy. Seat 1 acts first; later seats see the earlier players' cards before deciding.</p>
+      <p class="lede">Every player at the table counts and plays the same learned strategy. Seat 1 acts first; later seats see the earlier players' cards before deciding. Units won per 100 rounds dealt.</p>
       <div class="panel table-box"><table class="cmp" id="seatTbl"></table></div>
     </div>
   </section>
@@ -324,7 +325,7 @@ const unit = () => S().balanced ? "true count" : "running count";
 const R = D.rules;
 const big = n => n >= 1e9 ? `${+(n / 1e9).toFixed(1)} billion` : `${+(n / 1e6).toFixed(0)} million`;
 document.getElementById("eyebrow").textContent = `${D.title} · ${D.summary.length} counting systems`;
-const deckTxt = R.n_decks ? `${R.n_decks} decks` : "infinite deck";
+const deckTxt = R.n_decks ? `${R.n_decks} deck${R.n_decks > 1 ? "s" : ""}` : "infinite deck";
 document.getElementById("lede").textContent =
   `The learned playing strategy at every count, the expected gain of each decision, and the player's edge at each count, for ${D.summary.length} card-counting systems. ${deckTxt[0].toUpperCase() + deckTxt.slice(1)}, ${R.n_seats} player${R.n_seats > 1 ? "s, all counting," : ""} trained by self-play in a simulated shoe.`;
 [deckTxt, R.n_decks ? `${Math.round(R.penetration * 100)}% penetration` : null, R.h17 ? "H17" : "S17", R.das ? "DAS" : "no DAS", R.double === "any" ? "double any 2 cards" : `double ${R.double} only`,
@@ -335,8 +336,8 @@ document.getElementById("lede").textContent =
 // ---------- comparison table
 function drawCmp() {
   const t = document.getElementById("cmp"); t.textContent = "";
-  const cols = ["System", "Flat bet EV", "Gain from playing the count", "Rounds with player edge",
-                "Bet 1–3, play every round: units per 100 rounds", "Bet 0–3, sit out bad counts: units per 100 rounds dealt"];
+  const cols = ["System", "Flat bet", "Gain from playing the count", "Rounds with player edge",
+                "Bet 1–3, play every round", "Bet 0–3, sit out bad counts"];
   t.append(el("thead", {}, [el("tr", {}, cols.map(c => el("th", { textContent: c, scope: "col" })))]));
   const tb = el("tbody");
   const max = k => Math.max(...D.summary.map(s => s[k]));
@@ -345,11 +346,16 @@ function drawCmp() {
     const name = el("td", {}, [el("b", { textContent: NICE[s.name] }),
       el("span", { textContent: s.balanced ? "true count" : "running count" }),
       el("div", { className: "tags", textContent: `A…T: ${tags}` })]);
-    const bar = k => { const b = el("span", { className: "meter" }); b.style.width = Math.max(2, s[k] / max(k) * 50) + "px"; return b; };
+    const bar = k => {
+      const top = Math.max(...D.summary.map(x => Math.abs(x[k])));
+      const b = el("span", { className: s[k] < 0 ? "meter neg" : "meter" });
+      b.style.width = Math.max(2, Math.abs(s[k]) / top * 50) + "px";
+      return b;
+    };
     const cell = (txt, top, extra) => { const td = el("td", { textContent: txt }); if (top) td.className = "top"; if (extra) td.append(extra); return td; };
     const tr = el("tr", { tabIndex: 0 }, [name,
-      cell(pct(s.flat, 3), s.flat === max("flat"), el("div", { className: "se", textContent: `± ${(s.se * 100).toFixed(3)}%` })),
-      cell(pct(s.gain, 3), s.gain === max("gain")),
+      cell(sgn(s.flat * 100, 3), s.flat === max("flat"), el("div", { className: "se", textContent: `± ${(s.se * 100).toFixed(3)}` })),
+      cell(sgn(s.gain * 100, 3), s.gain === max("gain")),
       cell((s.share * 100).toFixed(1) + "%"),
       cell(sgn(s.won13, 2), s.won13 === max("won13"), bar("won13")),
       cell(sgn(s.won03, 2), s.won03 === max("won03"), bar("won03"))]);
@@ -361,10 +367,10 @@ function drawCmp() {
   });
   t.append(tb);
   document.getElementById("cmpLede").textContent =
-    `Each system trained its own agent on ${big(D.rounds)} rounds and was scored on ${big(D.eval_rounds)} fresh rounds. Count-blind basic strategy loses ${pct(-D.basic_ev, 3).slice(1)} per round here. Rows are sorted by the 0–3 return. Select a row to load that system in every section below.`;
+    `Each system trained its own agent on ${big(D.rounds)} rounds and was scored on ${big(D.eval_rounds)} fresh rounds. All money figures are units won per 100 rounds dealt (1 unit = the minimum bet); count-blind basic strategy makes ${sgn(D.basic_ev * 100, 2)} here. Rows are sorted by the 0–3 return. Select a row to load that system in every section below.`;
   const defs = document.getElementById("defs"); defs.textContent = "";
-  [["Flat bet EV", "Expected gain per round betting 1 unit every round, playing the learned count-based strategy."],
-   ["Gain from playing", "Flat bet EV minus basic strategy's EV: what count-based playing decisions alone are worth."],
+  [["Flat bet", "Betting 1 unit every round, playing the learned count-based strategy."],
+   ["Gain from playing", "Flat bet minus count-blind basic strategy: what count-based playing decisions alone are worth."],
    ["Bet 1–3 / 0–3", "Max-EV betting: 3 units at counts where the player has the edge, otherwise the minimum (1, or 0 to sit out). See Returns for ramps and risk."]]
     .forEach(([a, b]) => defs.append(el("dt", { textContent: a }), el("dd", { textContent: b })));
 }
@@ -466,12 +472,12 @@ function drawSeats() {
   const seats = D.seats[state.sys], t = document.getElementById("seatTbl");
   document.getElementById("seatBox").hidden = seats.length < 2;
   t.textContent = "";
-  t.append(el("thead", {}, [el("tr", {}, ["Seat", "Flat bet EV", "Bet 1–3, play every round: units per 100 rounds",
-    "Bet 0–3, sit out bad counts: units per 100 rounds dealt"].map(c => el("th", { textContent: c, scope: "col" })))]));
+  t.append(el("thead", {}, [el("tr", {}, ["Seat", "Flat bet", "Bet 1–3, play every round",
+    "Bet 0–3, sit out bad counts"].map(c => el("th", { textContent: c, scope: "col" })))]));
   const tb = el("tbody");
   seats.forEach((s, i) => tb.append(el("tr", {}, [
     el("td", {}, [el("b", { textContent: `Seat ${i + 1}` }), el("span", { textContent: i === 0 ? "first to act" : i === seats.length - 1 ? "last to act (third base)" : "" })]),
-    el("td", { textContent: pct(s.flat, 3) }, [el("div", { className: "se", textContent: `± ${(s.se * 100).toFixed(3)}%` })]),
+    el("td", { textContent: sgn(s.flat * 100, 3) }, [el("div", { className: "se", textContent: `± ${(s.se * 100).toFixed(3)}` })]),
     el("td", { textContent: sgn(s.won13, 2) }), el("td", { textContent: sgn(s.won03, 2) })])));
   t.append(tb);
 }
@@ -646,7 +652,7 @@ const notes = document.getElementById("notes");
  ["Limits. ", "Each agent sees the shoe only through its system's count, not the full composition. The ace-neutral systems are used without an ace side count, and Red Seven is missing because the simulator has no suits. Resplits are not modeled. Betting returns assume you can sit out rounds freely (0–3) and ignore table limits."]]
   .forEach(([b, t]) => notes.append(el("p", {}, [el("b", { textContent: b }), t])));
 
-selectSys(state.sys);
+selectSys([...D.summary].sort((a, b) => b.won03 - a.won03)[0].name);
 const redraw = () => drawEdge();
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
 new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
