@@ -75,20 +75,18 @@ def index_plays(qt):
     return plays, mode
 
 
-LINEAR = "linear"  # the agent without a predefined count (blackjack.dqn), a recap row only
-
-
 def _names(name):
-    """(system, type) as shown in the recap."""
-    if name == LINEAR:
-        return "No predefined count", "full composition, linear model"
+    """(system, type) as shown in the recap. dqn_<model> are the benchmark agents without a
+    predefined count (blackjack.dqn): recap rows only, no strategy card."""
+    if name.startswith("dqn_"):
+        return f"DQN {name[4:].replace('x', '×')}", "no predefined count, full composition"
     return tuple(SYSTEMS[name].description.split(", ", 1))
 
 
 def _summary_row(name, bet, basic):
     share, edge, se = map(np.array, (bet["share"], bet["edge"], bet["edge_se"]))
     flat = bet["strategies"]["flat 1"]
-    return dict(name=name, balanced=name == LINEAR or SYSTEMS[name].balanced, flat=flat["ev_round"],
+    return dict(name=name, balanced=name.startswith("dqn_") or SYSTEMS[name].balanced, flat=flat["ev_round"],
                 se=float(np.sqrt((share ** 2 * se ** 2).sum())), share=float(share[edge > 0].sum()),
                 gain=flat["ev_round"] - basic, won13=100 * bet["strategies"]["1-3 max EV"]["ev_round"],
                 won03=100 * bet["strategies"]["0-3 max EV"]["ev_round"],
@@ -120,9 +118,10 @@ def build(cfg):
                       overall=flat["ev_round"], overall_se=float(np.sqrt((share ** 2 * se ** 2).sum()))),
             devs=plays)
         summary.append(_summary_row(name, bet, basic))
-    linear = cfg.results_dir / f"betting_{LINEAR}.json"
-    if linear.exists():
-        summary.append(_summary_row(LINEAR, json.loads(linear.read_text()), basic))
+    for model in cfg.dqn:
+        path = cfg.results_dir / f"betting_dqn_{model[0]}.json"
+        if path.exists():
+            summary.append(_summary_row(f"dqn_{model[0]}", json.loads(path.read_text()), basic))
 
     rules = cfg.rules
     solver = InfiniteDeckSolver(rules)
@@ -210,7 +209,7 @@ def _recap_table(cfg):
 
 def _best_count(rows):
     """The best counting system in a summary.csv (rows are sorted best first)."""
-    return next(r for r in rows if r["system"] not in ("No count", _names(LINEAR)[0]))
+    return next(r for r in rows if r["system"] != "No count" and not r["system"].startswith("DQN "))
 
 
 def _games_table(configs, link=lambda cfg: f"docs/{cfg.name}/strategy_card.html"):

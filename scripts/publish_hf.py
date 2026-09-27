@@ -59,9 +59,10 @@ For each game, a folder `<game>/` with:
 - `config.yaml`: the rules (decks, penetration, soft 17, doubling, splits, surrender,
   payout, players)
 - `q_<system>.npz`: the trained table of one count system
-- `linear.npz`: the agent without a predefined count, a linear model on the full shoe
-  composition (`W`: advantage weights per decision, `Wr`: predicted edge before the deal;
-  load with `blackjack.dqn.ModelAgent.load`)
+- `dqn_<model>.npz`: the benchmark agents without a predefined count, DQNs on the full shoe
+  composition: `dqn_linear` (linear model) and, for single deck, `dqn_2x64` (plus a network
+  with two hidden layers of 64). `W`: advantage weights per decision, `mlp`: the network
+  part, `Wr`: predicted edge before the deal; load with `blackjack.dqn.ModelAgent.load`
 - `summary.csv`, `by_seat.csv`: the results by count system and by seat
 
 Each `.npz` holds:
@@ -163,8 +164,10 @@ def main():
                 shutil.copy(cfg.docs_dir / f, m / cfg.name / f)
             for system in cfg.systems:
                 shutil.copy(cfg.results_dir / f"q_{system}.npz", m / cfg.name / f"q_{system}.npz")
-            if (cfg.results_dir / "linear.npz").exists():
-                shutil.copy(cfg.results_dir / "linear.npz", m / cfg.name / "linear.npz")
+            for model in cfg.dqn:
+                path = cfg.results_dir / f"dqn_{model[0]}.npz"
+                if path.exists():
+                    shutil.copy(path, m / cfg.name / path.name)
         games = "\n".join(report._games_table(configs, lambda c: f"{pages_url}/{c.name}/index.html"))
         systems = list(dict.fromkeys(s for c in configs for s in c.systems))
         names = ", ".join(SYSTEMS[s].description.split(", ")[0] for s in systems)

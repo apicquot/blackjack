@@ -1,5 +1,6 @@
 system,type,flat_bet_per_100_rounds,count_play_gain_per_100_rounds,share_of_rounds_with_edge,bet_1_3_per_100_rounds,bet_0_3_per_100_rounds,bet_0_3_per_100_hands_played
-No predefined count,"full composition, linear model",0.056110,0.550240,0.373559,1.430812,2.062053,5.520027
+DQN linear,"no predefined count, full composition",0.056110,0.550240,0.373559,1.430812,2.062053,5.520027
+DQN 2×64,"no predefined count, full composition",0.053425,0.547555,0.370919,1.425146,2.057581,5.547249
 Zen Count,level 2,-0.156877,0.337254,0.315580,0.980749,1.706438,5.407300
 Wong Halves,level 3 (half points),-0.195145,0.298985,0.328246,0.936872,1.698025,5.173018
 Omega II,"level 2, ace neutral",-0.136854,0.357277,0.314872,0.973192,1.665069,5.288087

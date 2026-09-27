@@ -20,5 +20,7 @@ systems: [hi_lo, hi_opt_1, hi_opt_2, omega_2, zen, wong_halves, ko]
 rounds: 5e8             # training rounds per count system
 eval_rounds: 1e8        # rounds per evaluation run
 
-linear:                 # agent without a predefined count: linear model on the full
-  rounds: 4e8           # shoe composition (blackjack.dqn, needs torch)
+dqn:                    # benchmark agents without a predefined count, on the full
+                        # shoe composition (blackjack.dqn, needs torch)
+  linear: {rounds: 4e8}
+  2x64: {rounds: 4e8, hidden: [64, 64], activation: relu}

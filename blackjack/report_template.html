@@ -311,7 +311,8 @@ section { scroll-margin-top: 64px; }
 const D = /*DATA*/null;
 const ACT = ["Stand", "Hit", "Double", "Split", "Surrender"];
 const ACT_VAR = ["--a-stand", "--a-hit", "--a-double", "--a-split", "--a-surrender"];
-const NICE = { hi_lo: "Hi-Lo", hi_opt_1: "Hi-Opt I", hi_opt_2: "Hi-Opt II", omega_2: "Omega II", zen: "Zen", wong_halves: "Wong Halves", ko: "KO", linear: "No predefined count" };
+const NICE = { hi_lo: "Hi-Lo", hi_opt_1: "Hi-Opt I", hi_opt_2: "Hi-Opt II", omega_2: "Omega II", zen: "Zen", wong_halves: "Wong Halves", ko: "KO" };
+const nice_name = n => NICE[n] || (n.startsWith("dqn_") ? "DQN " + n.slice(4).replace("x", "×") : n);
 const MIN_N = 2000;
 const state = { sys: "hi_lo", b: null, view: "best", act: 1, hands: "two" };
 const S = () => D.systems[state.sys];
@@ -348,8 +349,8 @@ function drawCmp() {
     const name = el("td", {}, sys ? [el("b", { textContent: NICE[s.name] }),
       el("span", { textContent: s.balanced ? "true count" : "running count" }),
       el("div", { className: "tags", textContent: "A…T: " + sys.tags.map(x => (x > 0 ? "+" : x < 0 ? "−" : "") + Math.abs(x)).join(" ") })]
-      : [el("b", { textContent: NICE[s.name] || s.name }), el("span", { textContent: "full shoe composition, linear model" }),
-         el("div", { className: "tags", textContent: "results only: no count-based strategy card" })]);
+      : [el("b", { textContent: nice_name(s.name) }), el("span", { textContent: "no predefined count: full shoe composition" }),
+         el("div", { className: "tags", textContent: "benchmark: results only, no count-based strategy card" })]);
     const bar = k => {
       const top = Math.max(...D.summary.map(x => Math.abs(x[k])));
       const b = el("span", { className: s[k] < 0 ? "meter neg" : "meter" });
