@@ -5,6 +5,11 @@ a given game (decks, rules, payout), the agent learns the best play for every ha
 at every count, including insurance. It also gives the value of every decision and
 the expected return of a round before the deal under several betting strategies.
 
+**Online:**
+
+- **Results pages:** [huggingface.co/spaces/apicquot/blackjack-counting-results](https://huggingface.co/spaces/apicquot/blackjack-counting-results)
+- **Trained tables:** [huggingface.co/apicquot/blackjack-counting](https://huggingface.co/apicquot/blackjack-counting)
+
 gymnasium's `Blackjack-v1` draws from an infinite deck, so the past never
 matters. Here the cards come from a finite shoe dealt without replacement. The
 cards already seen change what is left, and a counting agent can exploit that.
@@ -207,9 +212,10 @@ All figures are units won per 100 rounds, 1 unit being the minimum bet.
 
 Each game's results page (`docs/<game>/strategy_card.html`) has the details: the
 value of a round before the deal at each count, every betting strategy, the
-strategy card with value and advantage at every count, and the index plays. GitHub
-shows HTML files as source. To view a page, download it and open it in a browser,
-or enable GitHub Pages on the `docs/` folder.
+strategy card with value and advantage at every count, and the index plays. They're
+online on the [Hugging Face Space](https://huggingface.co/spaces/apicquot/blackjack-counting-results).
+GitHub shows HTML files as source, so to view the repo copy, download it and open it
+in a browser.
 
 ## Setup
 
@@ -246,6 +252,7 @@ pytest                                        # ~1 min, mostly simulation checks
 python scripts/run.py configs/*.yaml          # train, evaluate and report every game
 python scripts/run.py configs/2deck_h17_das.yaml --steps report     # rebuild one report
 python scripts/simulate_shoe.py configs/2deck_h17_das.yaml          # basic strategy in the shoe env
+python scripts/publish_hf.py                  # publish tables and pages to Hugging Face (hf auth login first)
 ```
 
 `run.py` trains one agent per count system, evaluates the betting strategies,

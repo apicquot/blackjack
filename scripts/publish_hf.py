@@ -159,7 +159,7 @@ def main():
                 shutil.copy(cfg.docs_dir / f, m / cfg.name / f)
             for system in cfg.systems:
                 shutil.copy(cfg.results_dir / f"q_{system}.npz", m / cfg.name / f"q_{system}.npz")
-        games = "\n".join(report._games_table(configs, lambda c: f"{pages_url}/{c.name}/"))
+        games = "\n".join(report._games_table(configs, lambda c: f"{pages_url}/{c.name}/index.html"))
         systems = list(dict.fromkeys(s for c in configs for s in c.systems))
         names = ", ".join(SYSTEMS[s].description.split(", ")[0] for s in systems)
         (m / "README.md").write_text(MODEL_CARD.format(n_games=len(configs), n_systems=len(systems), systems=names,
@@ -172,7 +172,7 @@ def main():
             (s / cfg.name).mkdir(parents=True)
             shutil.copy(cfg.docs_dir / "strategy_card.html", s / cfg.name / "index.html")
             cells = report._games_table([cfg])[2].split("|")[2:-1]
-            rows.append(f'<tr><td><a href="{cfg.name}/">{html.escape(cfg.title)}</a></td>'
+            rows.append(f'<tr><td><a href="{cfg.name}/index.html">{html.escape(cfg.title)}</a></td>'
                         + "".join(f"<td>{html.escape(c.strip())}</td>" for c in cells[:5]) + "</tr>")
         (s / "index.html").write_text(INDEX.format(github=GITHUB, model=model, model_url=f"https://huggingface.co/{model}",
                                                    rows="\n".join(rows)), encoding="utf-8")
