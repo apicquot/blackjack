@@ -467,15 +467,26 @@ actually see: the cards seen per rank (`ShoeView.seen`) and the cards left, with
 counting system assumed.
 
 - **Why a table no longer works:** the state becomes multi-dimensional (10 rank
-  counts plus the hand and the up card), far too many states for a table.
-- **Deep Q-network:** a DQN, or another function approximator, would link similar
-  states together, so experience in one composition generalizes to its neighbours.
-- **What it would show:** comparing it with the best counting system measures what
-  a one-number count leaves on the table.
-- **Ground truth:** an exact composition-dependent solver can check it on small
-  cases (single deck).
-- **Where it plugs in:** the gymnasium interface (`ShoeEnv`) already exposes that
-  observation.
+  counts plus the hand and the up card, about 10¹⁴ shoe compositions for 6 decks),
+  far too many for a table. A model has to generalize from the compositions it sees
+  to similar ones.
+- **Step 1, a linear model:** for each decision, the value is a weighted sum of the
+  excess of each rank left per deck. The learned weights are an ideal count for that
+  decision (the "effects of removal"), directly comparable with a system's tags. It's
+  small (about 21,000 weights), stable, and readable.
+- **Step 2, a neural network,** if the linear model leaves a meaningful gap: a double
+  dueling DQN with action masks. It captures interactions between ranks, with separate
+  outputs for the value V and the advantages A. It needs large batches from the numba
+  engine; the Python `ShoeEnv` is too slow for that volume.
+- **Ground truth:** the rules and card odds are fully known, so the exact value of
+  each action can be computed for any sampled composition. Exact values for a few
+  thousand compositions measure how close each model gets. They could also be used
+  directly as noise-free training targets.
+- **Reporting:** the same report format. The agent is one more row, "no predefined
+  count", in each game's recap table, with the same metrics measured the same way:
+  flat bet, gain from playing, rounds with player edge, and the betting returns. That
+  row measures what a one-number count leaves on the table. The strategy card and index
+  plays assume a single count, so they won't offer it.
 
 **Known gaps from the counting literature**
 
