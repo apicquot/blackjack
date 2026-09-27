@@ -439,7 +439,7 @@ function drawBets() {
   const head = el("span", { className: "ramp-head" });
   B.labels.forEach(l => head.append(el("span", { textContent: nice(l).replace(/[≤≥]/, "") })));
   const rampTh = el("th", { className: "ramp-col", scope: "col" }, [el("div", { textContent: `Bet at each ${unit()}` }), head]);
-  const cols = ["Rounds played", "Average bet", "EV per hand played", "EV per 100 rounds dealt", "EV per unit bet", "SD per round", "Rounds to 1 SD"];
+  const cols = ["Rounds played", "Average bet", "Units won per 100 hands played", "Units won per 100 rounds dealt", "EV per unit bet", "SD per round", "Rounds to 1 SD"];
   t.append(el("thead", {}, [el("tr", {}, [el("th", { textContent: "Strategy", scope: "col" }), rampTh, ...cols.map(c => el("th", { textContent: c, scope: "col" }))])]));
   const tb = el("tbody");
   const vals = Object.values(B.strategies);
@@ -453,7 +453,7 @@ function drawBets() {
       el("td", { className: "ramp-col" }, [cells]),
       td((s.played * 100).toFixed(1) + "%"),
       td(s.avg_bet.toFixed(2)),
-      td(sgn(s.ev_hand, 4), s.ev_hand === best("ev_hand")),
+      td(sgn(s.ev_hand * 100, 2), s.ev_hand === best("ev_hand")),
       td(sgn(s.ev_round * 100, 2), s.ev_round === best("ev_round")),
       td(pct(s.ev_unit, 2), s.ev_unit === best("ev_unit")),
       td(s.sd_round.toFixed(2)),
@@ -461,8 +461,8 @@ function drawBets() {
   });
   t.append(tb);
   const defs = document.getElementById("betDefs"); defs.textContent = "";
-  [["EV per hand played", "Units won per round you actually bet on."],
-   ["EV per 100 rounds dealt", "Units won per 100 rounds dealt at the table, including the rounds you sit out. This is the earning rate."],
+  [["Per 100 hands played", "Units won per 100 rounds you actually bet on."],
+   ["Per 100 rounds dealt", "Units won per 100 rounds dealt at the table, including the rounds you sit out. This is the earning rate."],
    ["EV per unit bet", "Units won per unit wagered."],
    ["SD per round", "Standard deviation of the result per round dealt, in units."],
    ["Rounds to 1 SD", "Rounds dealt until the expected win equals one standard deviation, (SD / EV)². Lower means the edge shows through the swings sooner."],

@@ -46,8 +46,9 @@ Interactive results: [{space}]({space}).
 ## Results at a glance
 
 Best count per game. Money is in units won per 100 rounds dealt (1 unit = the minimum
-bet); the last column is per 100 hands played. Betting: 3 units at counts with a player
-edge, otherwise 1 (1–3) or nothing (0–3).
+bet), except the last column: units won per 100 hands actually played, since 0–3 sits
+out the rounds without a player edge. Betting: 3 units at counts with a player edge,
+otherwise 1 (1–3) or nothing (0–3).
 
 {games_table}
 
