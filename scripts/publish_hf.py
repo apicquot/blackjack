@@ -28,6 +28,7 @@ library_name: numpy
 tags:
 - reinforcement-learning
 - q-learning
+- dqn
 - tabular
 - blackjack
 - card-counting
@@ -35,17 +36,29 @@ tags:
 
 # Blackjack card counting: learned strategy tables
 
-Tabular Q-learning agents that learned blackjack strategy **at every card count**,
-for {n_games} Las Vegas games and {n_systems} counting systems ({systems}). No basic strategy or index table was given: every play,
-index play and insurance decision was learned by self-play in a simulated shoe, with
-every player at the table counting.
+A benchmark of blackjack card counting, for {n_games} Las Vegas games. Two kinds of
+agents are compared:
+
+- **Counting systems:** tabular Q-learning agents, one per system ({systems}). Each
+  sees the shoe through its count and learns the best play at every value of it.
+- **DQN agents with no predefined count** (**DQN linear**, **DQN 2×64**): they learn
+  from the full composition of the shoe, how many of each rank are left, and approach
+  the optimal gain. They are the yardstick: the gap between a count and the DQN agents
+  measures what a single count leaves on the table. DQN 2×64 adds a small neural
+  network to DQN linear, and gains almost nothing over it, so DQN linear is close to
+  the optimum.
+
+No basic strategy or index table was given: every play, index play and insurance
+decision was learned by self-play in a simulated shoe, with every player at the table
+playing the same agent.
 
 Code, method and validation: [{github}]({github}).
 Interactive results: [{space}]({space}).
 
 ## Results at a glance
 
-Best count per game. Money is in units won per 100 rounds dealt (1 unit = the minimum
+Best counting system per game (the DQN agents are in each game's page and CSV).
+Money is in units won per 100 rounds dealt (1 unit = the minimum
 bet), except the last column: units won per 100 hands actually played, since 0–3 sits
 out the rounds without a player edge. Betting: 3 units at counts with a player edge,
 otherwise 1 (1–3) or nothing (0–3).
@@ -114,9 +127,13 @@ a {{ color: #1f6a4c; }}
 </style></head>
 <body><main>
 <h1>Blackjack Counting Strategies</h1>
-<p>Card-counting agents trained by self-play on popular Las Vegas games. Each game's page has the
-strategy at every count, the value of each decision, the player's edge before the deal and the
-return of each betting strategy. Figures are units won per 100 rounds (1 unit = the minimum bet).
+<p>A benchmark of card counting on popular Las Vegas games. Seven counting systems, each learned
+by self-play, are compared with DQN agents that have no predefined count: they learn from the full
+composition of the shoe and approach the optimal gain, so the gap measures what a single count
+leaves on the table. The table below shows the best counting system per game; each game's page
+compares every system with the DQN agents, and has the strategy at every count, the value of each
+decision, the player's edge before the deal and the return of each betting strategy. Figures are
+units won per 100 rounds (1 unit = the minimum bet).
 Code: <a href="{github}">{github}</a>. Tables: <a href="{model_url}">{model}</a>.</p>
 <table><thead><tr><th>Game</th><th>Best count</th><th>No count, flat bet</th><th>Best count, flat bet</th>
 <th>Bet 1–3, play every round</th><th>Bet 0–3, sit out bad counts</th></tr></thead>
